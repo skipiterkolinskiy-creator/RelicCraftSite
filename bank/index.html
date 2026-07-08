@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RelicBank - RelicCraft</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div class="sky"></div>
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="../"><span class="brand-mark">RC</span><span>RelicCraft</span></a>
+      <div class="nav-links">
+        <a href="../">Главная</a><a href="../start/">Как начать</a><a href="../features/">Фишки</a><a href="../voice/">Войс чат</a><a href="../rules/">Правила</a><a class="active" href="../bank/">Банк</a><a href="../discord/">Discord</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-title">
+      <div class="wrap">
+        <div class="eyebrow">RelicBank</div>
+        <h1>Банк сервера</h1>
+        <p>Войди в банковский аккаунт, смотри номер счёта, баланс, переводы и долги. В игре команда банка: /bank.</p>
+      </div>
+    </section>
+
+    <section class="bank-shell">
+      <div class="wrap bank-layout">
+        <aside class="bank-auth" id="bank-auth">
+          <h2>Вход</h2>
+          <p class="bank-note">Аккаунт создаётся на сервере Minecraft. Пароль для сайта задаётся командой /bankpass.</p>
+
+          <form class="bank-form" id="bank-login">
+            <label>Ник
+              <input name="username" type="text" minlength="3" maxlength="16" required autocomplete="username" placeholder="TESTBANK">
+            </label>
+            <label>Пароль
+              <input name="password" type="password" minlength="4" required autocomplete="current-password">
+            </label>
+            <button class="btn" type="submit"><span>Войти</span></button>
+          </form>
+
+          <p class="bank-status" id="bank-auth-status"></p>
+        </aside>
+
+        <section class="bank-panel bank-hidden" id="bank-app">
+          <div class="bank-cardline">
+            <article class="bank-metric">
+              <small>Игрок</small>
+              <strong id="bank-player">-</strong>
+            </article>
+            <article class="bank-metric">
+              <small>Номер счёта</small>
+              <strong id="bank-account">-</strong>
+            </article>
+            <article class="bank-metric">
+              <small>Баланс</small>
+              <strong id="bank-balance">0$</strong>
+            </article>
+          </div>
+
+          <div class="bank-grid">
+            <article class="bank-widget">
+              <h3>Перевод</h3>
+              <form class="bank-form" id="bank-transfer">
+                <label>Номер счёта получателя
+                  <input name="target" type="text" placeholder="1488-TK" required>
+                </label>
+                <label>Сумма
+                  <input name="amount" type="number" min="1" step="1" required>
+                </label>
+                <label>Комментарий
+                  <input name="comment" type="text" maxlength="42" placeholder="За ресурсы">
+                </label>
+                <button class="btn" type="submit"><span>Отправить</span></button>
+              </form>
+            </article>
+
+            <article class="bank-widget">
+              <h3>Долг</h3>
+              <form class="bank-form" id="bank-loan">
+                <label>Сумма
+                  <input name="amount" type="number" min="1" max="50000" step="1" required>
+                </label>
+                <button class="btn" type="submit"><span>Взять в долг</span></button>
+                <button class="btn alt" type="button" id="bank-repay"><span>Погасить долг</span></button>
+              </form>
+              <p class="bank-note">Текущий долг: <strong id="bank-debt">0$</strong></p>
+            </article>
+          </div>
+
+          <div class="bank-actions">
+            <button class="btn alt" type="button" id="bank-copy"><span>Скопировать счёт</span></button>
+            <button class="btn alt" type="button" id="bank-refresh"><span>Обновить</span></button>
+            <button class="btn alt" type="button" id="bank-logout"><span>Выйти</span></button>
+          </div>
+
+          <p class="bank-status" id="bank-status"></p>
+
+          <article class="bank-table">
+            <h3>История операций</h3>
+            <div class="bank-history" id="bank-history"></div>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span>RelicBank - банковская система RelicCraft.</span>
+      <a class="btn alt" href="../"><span>На сайт</span></a>
+    </div>
+  </footer>
+  <script src="../script.js"></script>
+  <script src="bank.js"></script>
+</body>
+</html>
