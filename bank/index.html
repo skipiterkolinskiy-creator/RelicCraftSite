@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RelicBank - RelicCraft</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { opacity: 1 !important; transform: none !important; filter: none !important; }
+    .bank-page { min-height: 100vh; padding: 110px 20px 80px; color: #f7fbef; }
+    .bank-wrap { width: min(1120px, 100%); margin: 0 auto; }
+    .bank-hero { margin-bottom: 34px; }
+    .bank-hero h1 { margin: 12px 0 10px; font-size: clamp(42px, 7vw, 78px); line-height: .95; }
+    .bank-hero p { color: rgba(247, 251, 239, .76); font-size: 18px; max-width: 920px; }
+    .bank-shell { width: min(760px, 100%); background: rgba(2, 16, 10, .72); border: 1px solid rgba(205, 248, 239, .18); border-radius: 8px; padding: 22px; box-shadow: 0 24px 80px rgba(0, 0, 0, .38); }
+    .login-grid, .actions-grid, .stats-grid { display: grid; gap: 12px; }
+    .login-grid { grid-template-columns: 1fr 1fr auto; align-items: end; }
+    .actions-grid { grid-template-columns: 1fr 1fr; margin-top: 16px; }
+    .stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 16px; }
+    .field, .stat, .action-box, .history-box { background: rgba(255,255,255,.055); border: 1px solid rgba(205, 248, 239, .18); border-radius: 8px; padding: 14px; }
+    label { display: grid; gap: 7px; color: rgba(247, 251, 239, .82); font-weight: 800; }
+    input { width: 100%; min-height: 44px; border: 1px solid rgba(205, 248, 239, .25); border-radius: 6px; background: rgba(255,255,255,.9); color: #0b140f; padding: 0 12px; font: inherit; }
+    button { min-height: 48px; border: 0; border-radius: 8px; padding: 0 20px; font: inherit; font-weight: 900; cursor: pointer; color: #07100c; background: linear-gradient(135deg, #57d77a, #ffd85a); }
+    .ghost { color: #f7fbef; background: rgba(255,255,255,.08); border: 1px solid rgba(205, 248, 239, .26); }
+    .stat span { display: block; color: rgba(247, 251, 239, .7); font-weight: 800; margin-bottom: 8px; }
+    .stat strong { display: block; font-size: 30px; overflow-wrap: anywhere; }
+    .status { margin: 14px 0 0; min-height: 24px; color: #7dff99; font-weight: 900; }
+    .status.bad { color: #ff765f; }
+    .action-box h2, .history-box h2 { margin: 0 0 12px; font-size: 22px; }
+    .action-box { display: grid; gap: 12px; align-content: start; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 20px; }
+    .history-box { margin-top: 16px; }
+    .history-row { display: flex; justify-content: space-between; gap: 16px; padding: 13px 0; border-top: 1px solid rgba(255,255,255,.12); }
+    .history-row:first-child { border-top: 0; }
+    .history-row span { display: block; color: rgba(247, 251, 239, .62); margin-top: 4px; }
+    .plus { color: #61ff91; }
+    .minus { color: #ffdf6b; }
+    .muted { color: rgba(247, 251, 239, .68); }
+    @media (max-width: 760px) {
+      .bank-page { padding-top: 92px; }
+      .login-grid, .actions-grid, .stats-grid { grid-template-columns: 1fr; }
+      .bank-shell { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="/">
+        <span class="brand-mark">RC</span>
+        <span>RelicCraft</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Главная</a>
+        <a href="/start/">Как начать</a>
+        <a href="/features/">Фишки</a>
+        <a href="/voice/">Войс чат</a>
+        <a href="/rules/">Правила</a>
+        <a class="active" href="/bank/">Банк</a>
+        <a href="/discord/">Discord</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="bank-page hero-bg">
+    <div class="bank-wrap">
+      <section class="bank-hero">
+        <span class="eyebrow">RelicBank</span>
+        <h1>Банк сервера</h1>
+        <p>Войди в банковский аккаунт, смотри номер счёта, баланс, переводы и долги. В игре команда банка: /bank.</p>
+      </section>
+
+      <section class="bank-shell" id="loginBox">
+        <h2>Вход</h2>
+        <p class="muted">Если аккаунта ещё нет, он создастся при первом входе с этим паролем.</p>
+        <form id="loginForm" class="login-grid">
+          <label>Ник
+            <input id="username" autocomplete="username" placeholder="PixelPivo" required>
+          </label>
+          <label>Пароль
+            <input id="password" type="password" autocomplete="current-password" required>
+          </label>
+          <button type="submit">Войти</button>
+        </form>
+        <p id="status" class="status"></p>
+      </section>
+
+      <section class="bank-shell" id="bankPanel" hidden>
+        <div class="stats-grid">
+          <div class="stat"><span>Игрок</span><strong id="playerName">-</strong></div>
+          <div class="stat"><span>Номер счёта</span><strong id="accountNumber">-</strong></div>
+          <div class="stat"><span>Баланс</span><strong id="balance">0$</strong></div>
+        </div>
+
+        <div class="actions-grid">
+          <div class="action-box">
+            <h2>Перевод</h2>
+            <label>Номер счёта получателя<input id="to" placeholder="1488-TK"></label>
+            <label>Сумма<input id="amount" inputmode="numeric"></label>
+            <label>Комментарий<input id="comment" placeholder="За ресурсы"></label>
+            <button id="transferBtn">Отправить</button>
+          </div>
+
+          <div class="action-box">
+            <h2>Долг</h2>
+            <label>Сумма<input id="loanAmount" inputmode="numeric"></label>
+            <button id="loanBtn">Взять в долг</button>
+            <button id="repayBtn" class="ghost">Погасить долг</button>
+            <p class="muted">Текущий долг: <b id="debt">0$</b></p>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="copyBtn" class="ghost">Скопировать счёт</button>
+          <button id="refreshBtn" class="ghost">Обновить</button>
+          <button id="logoutBtn" class="ghost">Выйти</button>
+        </div>
+
+        <p id="status" class="status"></p>
+
+        <div class="history-box">
+          <h2>История операций</h2>
+          <div id="history"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="bank.js?v=hostland-bank-1"></script>
+</body>
+</html>
