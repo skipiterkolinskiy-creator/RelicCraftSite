@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RelicBank - RelicCraft</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { opacity: 1 !important; transform: none !important; filter: none !important; }
+    .bank-page { min-height: 100vh; padding: 62px 0 88px; }
+    .bank-hero { max-width: 880px; margin-bottom: 28px; }
+    .bank-hero h1 { font-size: clamp(48px, 8vw, 92px); line-height: .9; }
+    .bank-hero p { max-width: 760px; color: var(--muted); font-size: 18px; line-height: 1.6; }
+    .bank-shell { width: min(1120px, 100%); display: grid; grid-template-columns: minmax(300px, .82fr) minmax(0, 1.18fr); gap: 18px; align-items: stretch; }
+    .bank-card { border: 1px solid rgba(255,255,255,.14); border-radius: 8px; background: rgba(8,18,14,.82); box-shadow: 0 20px 70px rgba(0,0,0,.32); padding: clamp(20px, 3vw, 30px); backdrop-filter: blur(18px); }
+    .cabinet-card { display: grid; align-content: center; min-height: 360px; }
+    .cabinet-icon { width: 64px; height: 64px; display: grid; place-items: center; margin-bottom: 22px; border-radius: 8px; background: linear-gradient(135deg, var(--green), var(--gold)); color: #07110d; font-size: 30px; font-weight: 900; box-shadow: 0 0 40px rgba(68,209,122,.32); }
+    .cabinet-card h2, .commands-card h2 { font-size: clamp(28px, 4vw, 44px); margin-bottom: 12px; }
+    .bank-note { margin: 0; color: var(--muted); line-height: 1.65; }
+    .bank-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .command-list { display: grid; gap: 12px; margin-top: 20px; }
+    .command-row { display: grid; grid-template-columns: minmax(170px, 260px) minmax(0, 1fr); gap: 14px; padding: 15px; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: rgba(255,255,255,.06); }
+    .command-row code { color: #ffe08b; font: 900 16px/1.4 Consolas, monospace; overflow-wrap: anywhere; }
+    .command-row span { color: #dce8d7; line-height: 1.5; }
+    .toast-stack { position: fixed; right: 22px; top: 92px; z-index: 50; display: grid; gap: 12px; width: min(420px, calc(100vw - 32px)); pointer-events: none; }
+    .mc-toast { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; align-items: center; min-height: 82px; padding: 12px 14px; border: 2px solid rgba(255, 216, 90, .72); border-radius: 4px; background: rgba(6, 12, 9, .94); box-shadow: 0 16px 42px rgba(0,0,0,.38), inset 0 0 0 1px rgba(255,255,255,.08); animation: toastIn .22s ease-out, toastOut .28s ease-in 3.2s forwards; }
+    .mc-toast-icon { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 6px; background: linear-gradient(135deg, #ff624d, #ffd85a); color: #180d08; font-size: 26px; font-weight: 900; }
+    .mc-toast strong { display: block; color: #ff765f; font-size: 16px; margin-bottom: 4px; }
+    .mc-toast span { display: block; color: #f3f8ef; line-height: 1.35; }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { to { opacity: 0; transform: translateX(28px); } }
+    @media (max-width: 840px) {
+      .bank-shell, .command-row { grid-template-columns: 1fr; }
+      .cabinet-card { min-height: 300px; }
+      .toast-stack { top: 78px; right: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sky"></div>
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="../"><span class="brand-mark">RC</span><span>RelicCraft</span></a>
+      <div class="nav-links">
+        <a href="../">Главная</a>
+        <a href="../start/">Как начать</a>
+        <a href="../features/">Фишки</a>
+        <a href="../voice/">Войс чат</a>
+        <a href="../rules/">Правила</a>
+        <a class="active" href="../bank/">Банк</a>
+        <a href="../discord/">Discord</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="bank-page">
+    <div class="wrap">
+      <section class="bank-hero">
+        <div class="eyebrow">RelicBank</div>
+        <h1>Банк сервера</h1>
+        <p>RelicBank уже работает внутри Minecraft. Веб-кабинет появится позже, когда сайт будет подключён к общей базе сервера.</p>
+      </section>
+
+      <section class="bank-shell">
+        <article class="bank-card cabinet-card">
+          <div class="cabinet-icon">RB</div>
+          <h2>Кабинет игрока</h2>
+          <p class="bank-note">Личный кабинет временно закрыт. Баланс, номер счёта и переводы сейчас доступны через команды в игре.</p>
+          <div class="bank-actions">
+            <button class="btn" id="cabinetBtn" type="button"><span>Зайти в кабинет</span></button>
+            <a class="btn alt" href="../"><span>На главную</span></a>
+          </div>
+        </article>
+
+        <article class="bank-card commands-card">
+          <h2>RelicBank работает в игре</h2>
+          <p class="bank-note">Используй команды на сервере Minecraft. Веб-кабинет будет включён позже.</p>
+          <div class="command-list">
+            <div class="command-row">
+              <code>/bank</code>
+              <span>посмотреть счёт и баланс</span>
+            </div>
+            <div class="command-row">
+              <code>/bankpass &lt;пароль&gt;</code>
+              <span>задать пароль для будущего сайта</span>
+            </div>
+            <div class="command-row">
+              <code>/sendm &lt;номер счета&gt; &lt;сумма&gt; &lt;комментарий&gt;</code>
+              <span>перевести деньги. Комментарий писать не обязательно</span>
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+  <script src="../script.js"></script>
+  <script>
+    const button = document.querySelector("#cabinetBtn");
+    const stack = document.querySelector("#toastStack");
+
+    button.addEventListener("click", () => {
+      const toast = document.createElement("div");
+      toast.className = "mc-toast";
+      toast.innerHTML = `
+        <div class="mc-toast-icon">!</div>
+        <div>
+          <strong>Ошибка 5004</strong>
+          <span>Кабинет не работает временно</span>
+        </div>
+      `;
+      stack.appendChild(toast);
+      window.setTimeout(() => toast.remove(), 3600);
+    });
+  </script>
+</body>
+</html>
