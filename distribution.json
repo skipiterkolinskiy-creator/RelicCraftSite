@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "discord": {
+    "clientId": "385581240906022916",
+    "smallImageText": "RelicLauncher",
+    "smallImageKey": "reliclauncher"
+  },
+  "java": {
+    "oracle": "https://www.java.com/download/"
+  },
+  "rss": "https://reliccraft.online/",
+  "servers": [
+    {
+      "id": "RelicCraft",
+      "name": "RelicCraft",
+      "description": "RelicCraft main profile. Add the real Minecraft modules here when the server pack is ready.",
+      "icon": "https://reliccraft.online/assets/site-avatar.png",
+      "version": "1.0.0",
+      "address": "reliccraft.online",
+      "minecraftVersion": "1.20.1",
+      "discord": {
+        "shortId": "RelicCraft",
+        "largeImageText": "RelicCraft",
+        "largeImageKey": "reliclauncher"
+      },
+      "mainServer": true,
+      "autoconnect": false,
+      "modules": []
+    }
+  ]
+}
